@@ -1747,41 +1747,61 @@
             }
         });
     </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-          const form = document.getElementById('contact-form');
-        
-          form.addEventListener('submit', async function(e) {
-            e.preventDefault();
-        
-            const formData = {
-              name: form.querySelector('#name').value,
-              email: form.querySelector('#email').value,
-              phone: form.querySelector('#phone').value,
-              message: form.querySelector('#message').value
-            };
-        
-            try {
-              const response = await fetch('http://localhost:3000/api/send-email', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
-              });
-        
-              if (response.ok) {
+   <script>
+    emailjs.init('Kku2A7n8j2XlnQaRf');
+</script>
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+    const form = document.getElementById('contact-form');
+    emailjs.init('Qvz8FBNNZnCl5UFDC')
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        emailjs.sendForm('service_yglij5cc', 'template_jamq28i', this)
+            .then(() => {
                 alert('ההודעה נשלחה בהצלחה!');
+                emailjs.sendForm('')
                 form.reset();
-              } else {
-                const error = await response.text();
-                alert('שגיאה בשליחה: ' + error);
-              }
-            } catch (err) {
-              console.error(err);
-              alert('שגיאה בשרת: ' + err.message);
-            }
-          });
-        });
-        </script>
-        
+            }, (error) => {
+                alert('אירעה שגיאה בשליחה: ' + error.text);
+            });
+        // emailjs.send('service_yglij5cc', 'template_jamq28i', this)
+        //             .then(function(response) {
+        //                 console.log('SUCCESS - Notification to owner!', response.status, response.text);
+        //                 alert('הפנייה התקבלה בהצלחה!', response.status, response.text);
+                        
+        //                 // לאחר שליחה מוצלחת לבעל האתר, שלח תשובה אוטומטית ללקוח
+        //                 return emailjs.send('service_yglij5cc', 'template_79jy7fhh', {
+        //                     name: name,
+        //                     email: email,
+        //                     reply_to: 'yakov1002444@gmail.com' // כתובת המייל שלך למענה
+        //                 });
+        //             })
+        //             .then(function(response) {
+        //                 if (response) {
+        //                     console.log('SUCCESS - Notification to owner!', response.status, response.text);
+        //                     alert('הפנייה התקבלה בהצלחה!', response.status, response.text);
+        //                                         }
+                        
+        //                 // הצגת הודעת הצלחה
+        //                 showSuccessMessage();
+                        
+        //                 // איפוס הטופס
+        //                 contactForm.reset();
+        //             })
+        //             .catch(function(error) {
+        //                 console.log('FAILED...', error);
+                        
+        //                 // הצגת הודעת שגיאה
+        //                 showErrorMessage();
+        //             })
+        //             .finally(function() {
+        //                 // החזרת כפתור השליחה למצב רגיל
+        //                 submitBtn.innerHTML = 'לחיצה אחת ואני חוזר אליך';
+        //                 submitBtn.disabled = false;
+        //             });
+
+    });
+</script>
 </body>
 </html>
