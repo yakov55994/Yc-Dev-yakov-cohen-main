@@ -13,7 +13,6 @@
     <meta property="og:image" content="https://yc-dev.pages.dev/images/yc-rock-logo.png">
     <meta property="og:url" content="https://yc-dev.pages.dev">
     <meta property="og:type" content="website">
-    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@100;200;300;400;500;600;700;800;900&display=swap');
         
@@ -1636,7 +1635,7 @@
     </footer>
 
     <!-- Scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script>
         // Initialize AOS
         AOS.init({
@@ -1737,24 +1736,41 @@
             }
         });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
     <script>
-        emailjs.init('Kku2A7n8j2XlnQaRf');
-    </script>
-    <script>
-        const form = document.getElementById('contact-form');
-    
-        form.addEventListener('submit', function(e) {
+        document.addEventListener('DOMContentLoaded', function () {
+          const form = document.getElementById('contact-form');
+        
+          form.addEventListener('submit', async function(e) {
             e.preventDefault();
-    
-            emailjs.sendForm('service_8j72psh', 'template_jamq28i', this)
-                .then(() => {
-                    alert('ההודעה נשלחה בהצלחה!');
-                    form.reset();
-                }, (error) => {
-                    alert('אירעה שגיאה בשליחה: ' + error.text);
-                });
+        
+            const formData = {
+              name: form.querySelector('#name').value,
+              email: form.querySelector('#email').value,
+              phone: form.querySelector('#phone').value,
+              message: form.querySelector('#message').value
+            };
+        
+            try {
+              const response = await fetch('http://localhost:3000/api/send-email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+              });
+        
+              if (response.ok) {
+                alert('ההודעה נשלחה בהצלחה!');
+                form.reset();
+              } else {
+                const error = await response.text();
+                alert('שגיאה בשליחה: ' + error);
+              }
+            } catch (err) {
+              console.error(err);
+              alert('שגיאה בשרת: ' + err.message);
+            }
+          });
         });
-    </script>
+        </script>
+        
 </body>
 </html>
