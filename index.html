@@ -1603,30 +1603,35 @@
                     <p>מעוניין לשמוע עוד או להתחיל פרויקט? אני כאן בשבילך.</p>
                 </div>
                 <div class="contact-form-container" data-aos="fade-up">
-                    <form class="contact-form" action="https://formsubmit.co/yakov1002444@gmail.com" method="POST">
-                        <div class="form-group">
-                            <label for="name" class="form-label">שם מלא</label>
-                            <input type="text" id="name" name="name" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email" class="form-label">אימייל</label>
-                            <input type="email" id="email" name="email" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone" class="form-label">טלפון</label>
-                            <input type="tel" id="phone" name="phone" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="message" class="form-label">איך אוכל לעזור לך?</label>
-                            <textarea id="message" name="message" class="form-control" required></textarea>
-                        </div>
-                        <!-- הוספת שדות נסתרים להגדרות נוספות -->
-                        <input type="hidden" name="_subject" value="פנייה חדשה מאתר">
-                        <input type="hidden" name="_template" value="table">
-                        <input type="hidden" name="_captcha" value="false">
-                        <input type="hidden" name="_next" value="https://yc-dev.pages.dev/thanks.html">
-                        <button type="submit" class="submit-btn">שלח הודעה</button>
-                    </form>
+                    <form class="contact-form" id="contactForm">
+            <div id="messageDiv"></div>
+            
+            <div class="form-group">
+                <label for="name" class="form-label">שם מלא</label>
+                <input type="text" id="name" name="name" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email" class="form-label">אימייל</label>
+                <input type="email" id="email" name="email" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone" class="form-label">טלפון</label>
+                <input type="tel" id="phone" name="phone" class="form-control">
+            </div>
+            
+            <div class="form-group">
+                <label for="message" class="form-label">איך אוכל לעזור לך?</label>
+                <textarea id="message" name="message" class="form-control" required></textarea>
+            </div>
+            
+            <!-- ✅ הסרתי את השדות הנסתרים של FormSubmit -->
+            <button type="submit" class="submit-btn" id="submitBtn">
+                <span class="btn-text">שלח הודעה</span>
+                <span class="loading">שולח... <span class="spinner"></span></span>
+            </button>
+        </form>
                 </div>
                 <div class="contact-info" data-aos="fade-up" data-aos-delay="100">
                     <div class="info-item">
@@ -1696,6 +1701,7 @@
 
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script>
         // Initialize AOS
         AOS.init({
@@ -1704,93 +1710,52 @@
             once: true,
             mirror: false
         });
-        
-        // Header Scroll Effect
-        const header = document.querySelector('header');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-        });
-        
-        // Mobile Menu Toggle
-        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-        const closeMenuBtn = document.querySelector('.close-menu');
-        const mobileNavWrapper = document.querySelector('.mobile-nav-wrapper');
-        
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileNavWrapper.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        });
-        
-        function closeMenu() {
-            mobileNavWrapper.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-        
-        closeMenuBtn.addEventListener('click', closeMenu);
-        document.querySelector('.mobile-nav-bg').addEventListener('click', closeMenu);
-        
-        // Close menu when clicking on a link
-        document.querySelectorAll('.mobile-nav-content ul li a, .mobile-cta').forEach(link => {
-            link.addEventListener('click', closeMenu);
-        });
-        
-        // Smooth Scroll for Navigation
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                
-                const targetId = this.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
-                
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 100,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-        
-        // Active Menu Item on Scroll
-        const sections = document.querySelectorAll('.section');
-        const navLinks = document.querySelectorAll('nav ul li a');
-        const mobileNavLinks = document.querySelectorAll('.mobile-nav-content ul li a');
-        
-        window.addEventListener('scroll', () => {
-            let current = '';
+
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
             
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
+            const submitBtn = document.getElementById('submitBtn');
+            const messageDiv = document.getElementById('messageDiv');
+            
+            // הצגת סטטוס טעינה
+            submitBtn.disabled = true;
+            submitBtn.classList.add('loading');
+            messageDiv.innerHTML = '';
+            
+            // איסוף נתוני הטופס
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                message: document.getElementById('message').value
+            };
+            
+            try {
+                // שליחה לשרת שלך
+                const response = await fetch('/api/send-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
                 
-                if (window.scrollY >= sectionTop - 200) {
-                    current = section.getAttribute('id');
+                const result = await response.json();
+                
+                if (response.ok && result.success) {
+                    messageDiv.innerHTML = '<div class="message success">ההודעה נשלחה בהצלחה! אחזור אליך בהקדם.</div>';
+                    document.getElementById('contactForm').reset();
+                } else {
+                    throw new Error(result.error || 'שגיאה בשליחת ההודעה');
                 }
-            });
-            
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === `#${current}`) {
-                    link.classList.add('active');
-                }
-            });
-            
-            mobileNavLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === `#${current}`) {
-                    link.classList.add('active');
-                }
-            });
-        });
-        
-        // Handle resize
-        window.addEventListener('resize', () => {
-            if (window.innerWidth > 768 && mobileNavWrapper.classList.contains('active')) {
-                closeMenu();
+                
+            } catch (error) {
+                console.error('Error:', error);
+                messageDiv.innerHTML = `<div class="message error">אירעה שגיאה: ${error.message}</div>`;
+            } finally {
+                // החזרת מצב הכפתור
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('loading');
             }
         });
     </script>
