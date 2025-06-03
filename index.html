@@ -1603,7 +1603,7 @@
                     <p>מעוניין לשמוע עוד או להתחיל פרויקט? אני כאן בשבילך.</p>
                 </div>
                 <div class="contact-form-container" data-aos="fade-up">
-                    <form class="contact-form" id="contact-form">
+                    <form class="contact-form" action="https://formsubmit.co/yakov1002444@gmail.com" method="POST">
                         <div class="form-group">
                             <label for="name" class="form-label">שם מלא</label>
                             <input type="text" id="name" name="name" class="form-control" required>
@@ -1620,6 +1620,11 @@
                             <label for="message" class="form-label">איך אוכל לעזור לך?</label>
                             <textarea id="message" name="message" class="form-control" required></textarea>
                         </div>
+                        <!-- הוספת שדות נסתרים להגדרות נוספות -->
+                        <input type="hidden" name="_subject" value="פנייה חדשה מאתר">
+                        <input type="hidden" name="_template" value="table">
+                        <input type="hidden" name="_captcha" value="false">
+                        <input type="hidden" name="_next" value="https://yc-dev.pages.dev/thanks.html">
                         <button type="submit" class="submit-btn">שלח הודעה</button>
                     </form>
                 </div>
@@ -1710,7 +1715,7 @@
             }
         });
         
-        // Mobile Menu Toggle - שינוי לתצוגה החדשה
+        // Mobile Menu Toggle
         const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
         const closeMenuBtn = document.querySelector('.close-menu');
         const mobileNavWrapper = document.querySelector('.mobile-nav-wrapper');
@@ -1750,7 +1755,7 @@
             });
         });
         
-        // Active Menu Item on Scroll - מעדכן גם את התפריט הנייד
+        // Active Menu Item on Scroll
         const sections = document.querySelectorAll('.section');
         const navLinks = document.querySelectorAll('nav ul li a');
         const mobileNavLinks = document.querySelectorAll('.mobile-nav-content ul li a');
@@ -1767,7 +1772,6 @@
                 }
             });
             
-            // מעדכן את התפריט הרגיל
             navLinks.forEach(link => {
                 link.classList.remove('active');
                 if (link.getAttribute('href') === `#${current}`) {
@@ -1775,7 +1779,6 @@
                 }
             });
             
-            // מעדכן את התפריט הנייד
             mobileNavLinks.forEach(link => {
                 link.classList.remove('active');
                 if (link.getAttribute('href') === `#${current}`) {
@@ -1791,61 +1794,5 @@
             }
         });
     </script>
-   <script>
-    emailjs.init('Kku2A7n8j2XlnQaRf');
-</script>
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-<script>
-    const form = document.getElementById('contact-form');
-    emailjs.init('Qvz8FBNNZnCl5UFDC')
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        emailjs.sendForm('service_yglij5cc', 'template_jamq28i', this)
-            .then(() => {
-                alert('ההודעה נשלחה בהצלחה!');
-                emailjs.sendForm('')
-                form.reset();
-            }, (error) => {
-                alert('אירעה שגיאה בשליחה: ' + error.text);
-            });
-        // emailjs.send('service_yglij5cc', 'template_jamq28i', this)
-        //             .then(function(response) {
-        //                 console.log('SUCCESS - Notification to owner!', response.status, response.text);
-        //                 alert('הפנייה התקבלה בהצלחה!', response.status, response.text);
-                        
-        //                 // לאחר שליחה מוצלחת לבעל האתר, שלח תשובה אוטומטית ללקוח
-        //                 return emailjs.send('service_yglij5cc', 'template_79jy7fhh', {
-        //                     name: name,
-        //                     email: email,
-        //                     reply_to: 'yakov1002444@gmail.com' // כתובת המייל שלך למענה
-        //                 });
-        //             })
-        //             .then(function(response) {
-        //                 if (response) {
-        //                     console.log('SUCCESS - Notification to owner!', response.status, response.text);
-        //                     alert('הפנייה התקבלה בהצלחה!', response.status, response.text);
-        //                                         }
-                        
-        //                 // הצגת הודעת הצלחה
-        //                 showSuccessMessage();
-                        
-        //                 // איפוס הטופס
-        //                 contactForm.reset();
-        //             })
-        //             .catch(function(error) {
-        //                 console.log('FAILED...', error);
-                        
-        //                 // הצגת הודעת שגיאה
-        //                 showErrorMessage();
-        //             })
-        //             .finally(function() {
-        //                 // החזרת כפתור השליחה למצב רגיל
-        //                 submitBtn.innerHTML = 'לחיצה אחת ואני חוזר אליך';
-        //                 submitBtn.disabled = false;
-        //             });
-
-    });
-</script>
 </body>
 </html>

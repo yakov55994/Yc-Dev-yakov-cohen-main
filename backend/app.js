@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 
 const app = express();
-const resend = new Resend('re_SWjYJQCJ_43DeRHGWhJk1c4do6tyjwUE3'); // הכנס את ה-API KEY שלך
+const resend = new Resend('re_WuPYgTHX_Pi1isLDfv7kYC4eaKPnVXngF'); // הכנס את ה-API KEY שלך
 
 app.use(cors());
 app.use(bodyParser.json());
