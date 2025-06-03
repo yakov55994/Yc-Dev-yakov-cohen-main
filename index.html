@@ -1602,11 +1602,11 @@
                     <h2>צור קשר</h2>
                     <p>מעוניין לשמוע עוד או להתחיל פרויקט? אני כאן בשבילך.</p>
                 </div>
-                <<div class="contact-form-container" data-aos="fade-up">
+                <div class="contact-form-container" data-aos="fade-up">
     <!-- ✅ הוסף div להודעות מחוץ לטופס -->
     <div id="messageDiv" style="margin-bottom: 20px;"></div>
     
-    <form class="contact-form" id="contactForm">
+    <form class="contact-form" action="https://formsubmit.co/yakov1002444@gmail.com" method="POST">
         <div class="form-group">
             <label for="name" class="form-label">שם מלא</label>
             <input type="text" id="name" name="name" class="form-control" required>
@@ -1627,9 +1627,15 @@
             <textarea id="message" name="message" class="form-control" required></textarea>
         </div>
         
-        <button type="submit" class="submit-btn" id="submitBtn">
+        <!-- הוספת שדות נסתרים להגדרות נוספות של FormSubmit -->
+        <input type="hidden" name="_subject" value="פנייה חדשה מאתר Yakov Cohen">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="https://yc-dev.pages.dev/thanks.html"> <!-- שנה לכתובת דף תודה אם קיים -->
+
+        <button type="submit" class="submit-btn">
             <span class="btn-text">שלח הודעה</span>
-            <span class="loading">שולח... <span class="spinner"></span></span>
+            <!-- <span class="loading">שולח... <span class="spinner"></span></span> תגובת הטעינה מנוהלת ע"י הדפדפן ב-FormSubmit -->
         </button>
     </form>
 </div>
@@ -1711,75 +1717,96 @@
             mirror: false
         });
 
-       document.getElementById('contactForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    
-    const submitBtn = document.getElementById('submitBtn');
-    const messageDiv = document.getElementById('messageDiv');
-    
-    // הצגת סטטוס טעינה
-    submitBtn.disabled = true;
-    submitBtn.classList.add('loading');
-    messageDiv.innerHTML = '';
-    
-    // איסוף נתוני הטופס
-    const formData = {
-        name: document.getElementById('name').value.trim(),
-        email: document.getElementById('email').value.trim(),
-        phone: document.getElementById('phone').value.trim(),
-        message: document.getElementById('message').value.trim()
-    };
-    
-    console.log('🚀 שולח נתונים:', formData); // לבדיקה
-    
-    try {
-        // ✅ בדיקה אם השרת פועל
-        const response = await fetch('/api/send-email', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData)
+       // Smooth Scroll for Navigation and Mobile Menu Close (keep this part)
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                     // Close mobile menu on link click
+                    const mobileNavWrapper = document.querySelector('.mobile-nav-wrapper');
+                    if (mobileNavWrapper.classList.contains('active')) {
+                         mobileNavWrapper.classList.remove('active');
+                         document.body.style.overflow = '';
+                    }
+                }
+            });
+        });
+
+        // Header Scroll Effect (keep this part)
+        const header = document.querySelector('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
         });
         
-        console.log('📡 תגובת שרת:', response.status); // לבדיקה
+        // Mobile Menu Toggle (keep this part)
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const closeMenuBtn = document.querySelector('.close-menu');
+        const mobileNavWrapper = document.querySelector('.mobile-nav-wrapper');
         
-        // ✅ בדיקה מפורטת של התגובה
-        if (response.ok) {
-            const result = await response.json();
-            console.log('✅ תוצאה:', result); // לבדיקה
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileNavWrapper.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        
+        function closeMenu() {
+            mobileNavWrapper.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        closeMenuBtn.addEventListener('click', closeMenu);
+        document.querySelector('.mobile-nav-bg').addEventListener('click', closeMenu);
+
+        // Active Menu Item on Scroll (keep this part)
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('nav ul li a');
+        const mobileNavLinks = document.querySelectorAll('.mobile-nav-content ul li a');
+        
+        window.addEventListener('scroll', () => {
+            let current = '';
             
-            if (result.success) {
-                messageDiv.innerHTML = '<div class="message success">✅ ההודעה נשלחה דרך Resend בהצלחה!</div>';
-                document.getElementById('contactForm').reset();
-            } else {
-                throw new Error(result.error || 'שגיאה לא ידועה');
-            }
-        } else {
-            // אם השרת לא זמין - כנראה לא רץ על localhost
-            if (response.status === 404) {
-                messageDiv.innerHTML = '<div class="message error">❌ השרת לא רץ! הפעל את השרת עם: npm run dev</div>';
-            } else {
-                const errorResult = await response.json().catch(() => ({}));
-                throw new Error(errorResult.error || `שגיאת שרת: ${response.status}`);
-            }
-        }
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                
+                if (window.scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+            
+            mobileNavLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
         
-    } catch (error) {
-        console.error('❌ שגיאה:', error);
-        
-        // ✅ הודעות שגיאה מפורטות
-        if (error.name === 'TypeError' && error.message.includes('fetch')) {
-            messageDiv.innerHTML = '<div class="message error">❌ לא ניתן להתחבר לשרת. וודא שהשרת רץ על localhost:3000</div>';
-        } else {
-            messageDiv.innerHTML = `<div class="message error">❌ שגיאה: ${error.message}</div>`;
-        }
-    } finally {
-        // החזרת מצב הכפתור
-        submitBtn.disabled = false;
-        submitBtn.classList.remove('loading');
-    }
-});
+        // Handle resize (keep this part)
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768 && mobileNavWrapper.classList.contains('active')) {
+                closeMenu();
+            }
+        });
+
     </script>
 </body>
 </html>
