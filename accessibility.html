@@ -103,7 +103,7 @@
         .header h1 {
             font-size: 4rem;
             font-weight: 900;
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%);
+            background: #10b981 ;
             background-size: 300% 300%;
             -webkit-background-clip: text;
             background-clip: text;
@@ -191,7 +191,7 @@
             content: '🚀';
             position: absolute;
             top: 2rem;
-            right: 2rem;
+            right: 0.1rem;
             font-size: 2rem;
             animation: rocket 4s ease-in-out infinite;
         }
@@ -783,12 +783,11 @@
     </style>
 </head>
 <body>
-    <div class="bg-animation"></div>
+    <!-- <div class="bg-animation"></div> -->
     
     <main class="container" role="main">
         <header class="header">
             <h1>הצהרת נגישות</h1>
-            <p class="subtitle">Future Accessibility Standards</p>
         </header>
         
         <div class="content">
@@ -815,16 +814,7 @@
                 </ul>
             </section>
 
-            <section class="section">
-                <h3>
-                    <span class="icon check-icon"></span>
-                    בדיקות ובקרה
-                </h3>
-                <p>
-                    האתר נבדק באמצעות כלי הבדיקות של Google Lighthouse ונמצא תואם לדרישות תקן הנגישות WCAG 2.1 ברמה AA.  
-                    הציון שהתקבל במדד הנגישות הוא <span class="score-highlight">98 מתוך 100</span>, המעיד על רמת נגישות גבוהה ומוקפדת.
-                </p>
-            </section>
+           
 
             <div class="divider"></div>
 
@@ -997,7 +987,7 @@
                 overflow: hidden !important;
                 clip: rect(0, 0, 0, 0) !important;
                 white-space: nowrap !important;
-                border: 0 !important;
+                border: 0 !important;   
             }
         `;
         document.head.appendChild(style);
