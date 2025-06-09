@@ -682,8 +682,15 @@
                 animation-duration: 30s;
             }
         }
-        
         @media (max-width: 480px) {
+            .intro::before {
+                content: '🚀';
+                position: absolute;
+                top: 0rem;
+                right: 2rem;
+                font-size: 1.1rem;
+                animation: rocket 4s ease-in-out infinite;
+            }
             .container {
                 padding: 0.5rem;
             }
