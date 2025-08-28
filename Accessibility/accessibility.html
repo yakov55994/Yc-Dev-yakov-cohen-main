@@ -1,10 +1,93 @@
-<div id="accessibility-toggle" title="סרגל נגישות">
-  <img src="../Accessibility/icons8-accessibility-100.png" alt="נגישות" width="60" height="60" class="icon-accessibility" />
-</div>
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>תפריט נגישות</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="accessibility.js"></script>
+ 
+</head>
+<body>
+    <!-- כפתור נגישות -->
+    <button class="accessibility-btn" onclick="toggleAccessibilityMenu()" aria-label="פתח תפריט נגישות">
+        <i class="fas fa-universal-access"></i>
+    </button>
 
-<div id="accessibility-bar" style="display: none;">
-  <button onclick="increaseFont()">הגדל טקסט</button>
-  <button onclick="toggleContrast()">ניגודיות</button>
-  <button onclick="highlightLinks()">הדגש קישורים</button>
-  <button onclick="resetAccessibility()">איפוס</button>
-</div>
+    <!-- רקע חוזר -->
+    <div class="accessibility-overlay" onclick="closeAccessibilityMenu()"></div>
+
+    <!-- תפריט נגישות -->
+    <div class="accessibility-menu" id="accessibilityMenu">
+        <div class="accessibility-menu-header">
+            <button class="close-accessibility" onclick="closeAccessibilityMenu()" aria-label="סגור תפריט נגישות">
+                <i class="fas fa-times"></i>
+            </button>
+           
+        </div>
+
+        <div class="accessibility-menu-content">
+            <!-- הגדרות נגישות -->
+            <div class="accessibility-section">
+                <div class="accessibility-grid">
+                    <div class="accessibility-item" onclick="toggleFeature('contrast')" data-feature="contrast">
+                        <i class="fas fa-adjust"></i>
+                        <span>תיאור קבור</span>
+                    </div>
+                    <div class="accessibility-item" onclick="toggleFeature('invert')" data-feature="invert">
+                        <i class="fas fa-circle-half-stroke"></i>
+                        <span>הגלת מיור</span>
+                    </div>
+                    <div class="accessibility-item" onclick="toggleFeature('links')" data-feature="links">
+                        <i class="fas fa-link"></i>
+                        <span>הדגשת קישורים</span>
+                    </div>
+                    <div class="accessibility-item" onclick="toggleFeature('headings')" data-feature="headings">
+                        <i class="fas fa-heading"></i>
+                        <span>הדגשת כותרות</span>
+                    </div>
+                    <div class="accessibility-item" onclick="toggleFeature('zoom')" data-feature="zoom">
+                        <i class="fas fa-search-plus"></i>
+                        <span>זיפוף צבע</span>
+                    </div>
+                    <div class="accessibility-item" onclick="toggleFeature('font')" data-feature="font">
+                        <i class="fas fa-font"></i>
+                        <span>גיזויות גבוהה</span>
+                    </div>
+                    <div class="accessibility-item" onclick="toggleFeature('cursor-black')" data-feature="cursor-black">
+                        <i class="fas fa-mouse-pointer"></i>
+                        <span>סמן שחור</span>
+                    </div>
+                    <div class="accessibility-item" onclick="toggleFeature('cursor-white')" data-feature="cursor-white">
+                        <i class="fas fa-hand-pointer"></i>
+                        <span>סמן לבן</span>
+                    </div>
+                    <div class="accessibility-item" onclick="toggleFeature('monochrome')" data-feature="monochrome">
+                        <i class="fas fa-palette"></i>
+                        <span>מונוכרום</span>
+                    </div>
+                    <div class="accessibility-item" onclick="toggleFeature('underline')" data-feature="underline">
+                        <i class="fas fa-underline"></i>
+                        <span>ספיה</span>
+                    </div>
+                    <div class="accessibility-item" onclick="toggleFeature('reading')" data-feature="reading">
+                        <i class="fas fa-book"></i>
+                        <span>מצב קריאה</span>
+                    </div>
+                    <div class="accessibility-item" onclick="toggleFeature('screen-magnify')" data-feature="screen-magnify">
+                        <i class="fas fa-expand"></i>
+                        <span>הגדלת מסך</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- כפתור איפוס -->
+            <button class="reset-btn" onclick="resetAllFeatures()">
+                <i class="fas fa-undo"></i> איפוס הגדרות
+            </button>
+        </div>
+    </div>
+
+    
+</body>
+</html>

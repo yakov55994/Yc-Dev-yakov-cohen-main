@@ -1,80 +1,337 @@
-#accessibility-toggle {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      /* background: #c0b6b6; */
-      color: black;
-      padding: 12px;
-      font-size: 16px;
-      cursor: pointer;
-      z-index: 10000;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      border-radius: 30px;
-    }
-
-    #accessibility-toggle span {
-      font-size: 12px;
-      font-weight: bold;
-      font-size: 15px;
-    }
-
-    #accessibility-toggle img{
-        box-shadow: #2cd3d3;
-    }
-
-    #accessibility-bar {
-      position: fixed;
-      bottom: 80px;
-      left: 20px;
-      background: #fff;
-      border: 1px solid #ccc;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-      padding: 10px;
-      display: none;
-      z-index: 9999;
-      width: 160px;
-      direction: rtl;
-      border-radius: 10px;
-    }
-
-    #accessibility-bar button {
-      display: block;
-      width: 100%;
-      margin-bottom: 6px;
-      padding: 8px;
-      font-size: 14px;
-      cursor: pointer;
-      border-radius: 40px;
-      font-weight: bold;
-      background-color: rgba(44, 211, 211, 0.3)
-      
-    }
-        #accessibility-bar button:hover {
-        background-color: rgba(6, 14, 33, 0.9);
-        color: white;
+        /* כפתור הנגישות הצף */
+        .accessibility-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #6366f1, #ec4899);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            z-index: 9999;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-    body.high-contrast, body.high-contrast * {
-      background-color: #000 !important;
-      color: #FFD700 !important;
-      border-color: #FFD700 !important;
-    }
+        .accessibility-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.4);
+        }
 
-    .highlight-links a {
-      background-color: yellow !important;
-      color: black !important;
-      text-decoration: underline !important;
-    }
-       .icon-accessibility{
-        border-radius: 30px;
-       }
-        .icon-accessibility:hover{
- box-shadow:
-    0 0 15px darkturquoise,
-    0 0 30px rgba(0, 206, 209, 0.6),
-    0 0 45px rgba(0, 206, 209, 0.4),
-    0 5px 15px rgba(0, 0, 0, 0.1);
-  transform: translateY(-3px) scale(1.08);
-  transition: all 0.3s ease;        }
+        /* תפריט הנגישות */
+        .accessibility-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
+            z-index: 10000;
+            transition: right 0.4s ease;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .accessibility-menu.active {
+            right: 0;
+        }
+
+        .accessibility-menu-header {
+            background: #1a5f3f;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .accessibility-menu-header h2 {
+            margin: 0;
+            font-size: 32px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .accessibility-menu-header p {
+            margin: 5px 0 0 0;
+            opacity: 0.9;
+            font-size: 16px;
+            color: white;
+        }
+
+        .close-accessibility {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+
+        .close-accessibility:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .accessibility-menu-content {
+            padding: 20px;
+            flex: 1;
+        }
+
+        .accessibility-section {
+            margin-bottom: 30px;
+        }
+
+        .accessibility-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .accessibility-item {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .accessibility-item:hover {
+            border-color: #6366f1;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .accessibility-item.active {
+            background: #6366f1;
+            color: white;
+            border-color: #6366f1;
+        }
+
+        .accessibility-item.active::before {
+            content: '';
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 20px;
+            height: 20px;
+            background: #10b981;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .accessibility-item.active::after {
+            content: '✓';
+            position: absolute;
+            top: 8px;
+            right: 9px;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .accessibility-item i {
+            font-size: 24px;
+            margin-bottom: 8px;
+            display: block;
+            color: #6366f1;
+        }
+
+        .accessibility-item.active i {
+            color: white;
+        }
+
+        .accessibility-item span {
+            font-size: 12px;
+            font-weight: 500;
+            display: block;
+        }
+
+        /* כפתור איפוס */
+        .reset-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #14b8a6, #6366f1);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* רקע חוזר כשהתפריט פתוח */
+        .accessibility-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9998;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .accessibility-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* אפקטי נגישות */
+        .high-contrast {
+            filter: contrast(200%) !important;
+        }
+
+        .invert-colors {
+            filter: invert(1) !important;
+        }
+
+        .grayscale {
+            filter: grayscale(1) !important;
+        }
+
+        .sepia {
+            filter: sepia(1) !important;
+        }
+
+        .highlight-links a {
+            background: yellow !important;
+            color: black !important;
+            text-decoration: underline !important;
+        }
+
+        .highlight-headings h1, 
+        .highlight-headings h2, 
+        .highlight-headings h3, 
+        .highlight-headings h4, 
+        .highlight-headings h5, 
+        .highlight-headings h6 {
+            background: #ffeb3b !important;
+            color: #000 !important;
+            padding: 5px !important;
+        }
+
+        .big-cursor * {
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path d="M2 2l28 14-10 2-4 12z" fill="black"/></svg>'), auto !important;
+        }
+
+        .white-cursor * {
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path d="M2 2l28 14-10 2-4 12z" fill="white" stroke="black" stroke-width="1"/></svg>'), auto !important;
+        }
+
+        .hide-images img {
+            display: none !important;
+        }
+
+        .monochrome {
+            filter: grayscale(1) contrast(1.2) !important;
+        }
+
+        .reading-mode {
+            line-height: 2 !important;
+            letter-spacing: 1px !important;
+        }
+
+        .magnify {
+            transform: scale(1.2) !important;
+            transform-origin: center !important;
+        }
+
+        /* רספונסיבי */
+        @media (max-width: 768px) {
+            .accessibility-menu {
+                width: 100%;
+                right: -100%;
+            }
+            
+            .accessibility-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            
+            .accessibility-item {
+                padding: 12px 8px;
+                min-height: 80px;
+            }
+            
+            .accessibility-item i {
+                font-size: 20px;
+            }
+            
+            .accessibility-item span {
+                font-size: 11px;
+            }
+        }
+
+        /* סגנונות בסיסיים לדמו */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f8fafc;
+        }
+
+        .demo-content {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2, h3 {
+            color: #1f2937;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #64748b;
+            margin-bottom: 15px;
+        }
+
+        a {
+            color: #6366f1;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    

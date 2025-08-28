@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>תפריט נגישות</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* כפתור הנגישות הצף */
+        .accessibility-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #6366f1, #ec4899);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            z-index: 9999;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .accessibility-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.4);
+        }
+
+        /* תפריט הנגישות */
+        .accessibility-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
+            z-index: 10000;
+            transition: right 0.4s ease;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .accessibility-menu.active {
+            right: 0;
+        }
+
+        .accessibility-menu-header {
+            background: #1a5f3f;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .accessibility-menu-header h2 {
+            margin: 0;
+            font-size: 32px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .accessibility-menu-header p {
+            margin: 5px 0 0 0;
+            opacity: 0.9;
+            font-size: 16px;
+            color: white;
+        }
+
+        .close-accessibility {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+
+        .close-accessibility:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .accessibility-menu-content {
+            padding: 20px;
+            flex: 1;
+        }
+
+        .accessibility-section {
+            margin-bottom: 30px;
+        }
+
+        .accessibility-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .accessibility-item {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .accessibility-item:hover {
+            border-color: #6366f1;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .accessibility-item.active {
+            background: #6366f1;
+            color: white;
+            border-color: #6366f1;
+        }
+
+        .accessibility-item.active::before {
+            content: '';
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 20px;
+            height: 20px;
+            background: #10b981;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .accessibility-item.active::after {
+            content: '✓';
+            position: absolute;
+            top: 8px;
+            right: 9px;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .accessibility-item i {
+            font-size: 24px;
+            margin-bottom: 8px;
+            display: block;
+            color: #6366f1;
+        }
+
+        .accessibility-item.active i {
+            color: white;
+        }
+
+        .accessibility-item span {
+            font-size: 12px;
+            font-weight: 500;
+            display: block;
+        }
+
+        /* כפתור איפוס */
+        .reset-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #14b8a6, #6366f1);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* רקע חוזר כשהתפריט פתוח */
+        .accessibility-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9998;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .accessibility-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* אפקטי נגישות */
+        .high-contrast {
+            filter: contrast(200%) !important;
+        }
+
+        .invert-colors {
+            filter: invert(1) !important;
+        }
+
+        .grayscale {
+            filter: grayscale(1) !important;
+        }
+
+        .sepia {
+            filter: sepia(1) !important;
+        }
+
+        .highlight-links a {
+            background: yellow !important;
+            color: black !important;
+            text-decoration: underline !important;
+        }
+
+        .highlight-headings h1, 
+        .highlight-headings h2, 
+        .highlight-headings h3, 
+        .highlight-headings h4, 
+        .highlight-headings h5, 
+        .highlight-headings h6 {
+            background: #ffeb3b !important;
+            color: #000 !important;
+            padding: 5px !important;
+        }
+
+        .big-cursor * {
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path d="M2 2l28 14-10 2-4 12z" fill="black"/></svg>'), auto !important;
+        }
+
+        .white-cursor * {
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path d="M2 2l28 14-10 2-4 12z" fill="white" stroke="black" stroke-width="1"/></svg>'), auto !important;
+        }
+
+        .hide-images img {
+            display: none !important;
+        }
+
+        .monochrome {
+            filter: grayscale(1) contrast(1.2) !important;
+        }
+
+        .reading-mode {
+            line-height: 2 !important;
+            letter-spacing: 1px !important;
+        }
+
+        .magnify {
+            transform: scale(1.2) !important;
+            transform-origin: center !important;
+        }
+
+        /* רספונסיבי */
+        @media (max-width: 768px) {
+            .accessibility-menu {
+                width: 100%;
+                right: -100%;
+            }
+            
+            .accessibility-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            
+            .accessibility-item {
+                padding: 12px 8px;
+                min-height: 80px;
+            }
+            
+            .accessibility-item i {
+                font-size: 20px;
+            }
+            
+            .accessibility-item span {
+                font-size: 11px;
+            }
+        }
+
+        /* סגנונות בסיסיים לדמו */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f8fafc;
+        }
+
+        .demo-content {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2, h3 {
+            color: #1f2937;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #64748b;
+            margin-bottom: 15px;
+        }
+
+        a {
+            color: #6366f1;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- כפתור נגישות -->
+    <button class="accessibility-btn" onclick="toggleAccessibilityMenu()" aria-label="פתח תפריט נגישות">
+        <i class="fas fa-universal-access"></i>
+    </button>
+
+    <!-- רקע חוזר -->
+    <div class="accessibility-overlay" onclick="closeAccessibilityMenu()"></div>
+
+    <!-- תפריט נגישות -->
+    <div class="accessibility-menu" id="accessibilityMenu">
+        <div class="accessibility-menu-header">
+            <button class="close-accessibility" onclick="closeAccessibilityMenu()" aria-label="סגור תפריט נגישות">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2>מגרש 1081 | בנין 18</h2>
+            <p>פנטהאוס 5 חדרים</p>
+        </div>
+
+        <div class="accessibility-menu-content">
+            <!-- הגדרות נגישות -->
+            <div class="accessibility-section">
+                <div class="accessibility-grid">
+                    <div class="accessibility-item" onclick="toggleFeature('contrast')" data-feature="contrast">
+                        <i class="fas fa-adjust"></i>
+                        <span>ניגודיות גבוהה</span>
+                    </div>
+                    <div class="accessibility-item" onclick="toggleFeature('invert')" data-feature="invert">
+                        <i class="fas fa-circle-half-stroke"></i>
+                        <span>היפוך צבעים</span>
+                    </div>
+                    <div class="accessibility-item" onclick="toggleFeature('links')" data-feature="links">
+                        <i class="fas fa-link"></i>
+                        <span>הדגשת קישורים</span>
+                    </div>
+                    <div class="accessibility-item" onclick="toggleFeature('headings')" data-feature="headings">
+                        <i class="fas fa-heading"></i>
+                        <span>הדגשת כותרות</span>
+                    </div>
+                    <div class="accessibility-item" onclick="toggleFeature('zoom')" data-feature="zoom">
+                        <i class="fas fa-search-plus"></i>
+                        <span>זום בדף</span>
+                    </div>
+                    <div class="accessibility-item" onclick="toggleFeature('font')" data-feature="font">
+                        <i class="fas fa-font"></i>
+                        <span>גופן גדול</span>
+                    </div>
+                    <div class="accessibility-item" onclick="toggleFeature('cursor-black')" data-feature="cursor-black">
+                        <i class="fas fa-mouse-pointer"></i>
+                        <span>סמן שחור</span>
+                    </div>
+                    <div class="accessibility-item" onclick="toggleFeature('cursor-white')" data-feature="cursor-white">
+                        <i class="fas fa-hand-pointer"></i>
+                        <span>סמן לבן</span>
+                    </div>
+                    <div class="accessibility-item" onclick="toggleFeature('monochrome')" data-feature="monochrome">
+                        <i class="fas fa-palette"></i>
+                        <span>מונוכרום</span>
+                    </div>
+                    <div class="accessibility-item" onclick="toggleFeature('underline')" data-feature="underline">
+                        <i class="fas fa-underline"></i>
+                        <span>קו תחתון לקישורים</span>
+                    </div>
+                    <div class="accessibility-item" onclick="toggleFeature('reading')" data-feature="reading">
+                        <i class="fas fa-book"></i>
+                        <span>מצב קריאה</span>
+                    </div>
+                    <div class="accessibility-item" onclick="toggleFeature('screen-magnify')" data-feature="screen-magnify">
+                        <i class="fas fa-expand"></i>
+                        <span>הגדלת מסך</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- כפתור איפוס -->
+            <button class="reset-btn" onclick="resetAllFeatures()">
+                <i class="fas fa-undo"></i> איפוס הגדרות
+            </button>
+        </div>
+    </div>
+
+
+
+    <script>
+        // משתני נגישות
+        let activeFeatures = new Set();
+
+        // פתיחה וסגירה של תפריט הנגישות
+        function toggleAccessibilityMenu() {
+            const menu = document.getElementById('accessibilityMenu');
+            const overlay = document.querySelector('.accessibility-overlay');
+            
+            menu.classList.toggle('active');
+            overlay.classList.toggle('active');
+            
+            if (menu.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+        }
+
+        function closeAccessibilityMenu() {
+            const menu = document.getElementById('accessibilityMenu');
+            const overlay = document.querySelector('.accessibility-overlay');
+            
+            menu.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // הפעלה וביטול של תכונות נגישות
+        function toggleFeature(feature) {
+            const element = document.querySelector(`[data-feature="${feature}"]`);
+            
+            if (activeFeatures.has(feature)) {
+                // ביטול התכונה
+                activeFeatures.delete(feature);
+                element.classList.remove('active');
+                disableFeature(feature);
+            } else {
+                // הפעלת התכונה
+                activeFeatures.add(feature);
+                element.classList.add('active');
+                enableFeature(feature);
+            }
+            saveSettings();
+        }
+
+        function enableFeature(feature) {
+            const body = document.body;
+            
+            switch(feature) {
+                case 'contrast':
+                    body.classList.add('high-contrast');
+                    break;
+                case 'invert':
+                    body.classList.add('invert-colors');
+                    break;
+                case 'links':
+                    body.classList.add('highlight-links');
+                    break;
+                case 'headings':
+                    body.classList.add('highlight-headings');
+                    break;
+                case 'zoom':
+                    body.classList.add('grayscale');
+                    break;
+                case 'font':
+                    body.style.filter = 'contrast(150%)';
+                    break;
+                case 'cursor-black':
+                    body.classList.add('big-cursor');
+                    break;
+                case 'cursor-white':
+                    body.classList.add('white-cursor');
+                    break;
+                case 'monochrome':
+                    body.classList.add('monochrome');
+                    break;
+                case 'underline':
+                    body.classList.add('sepia');
+                    break;
+                case 'reading':
+                    body.classList.add('reading-mode');
+                    break;
+                case 'screen-magnify':
+                    body.classList.add('magnify');
+                    break;
+            }
+        }
+
+        function disableFeature(feature) {
+            const body = document.body;
+            
+            switch(feature) {
+                case 'contrast':
+                    body.classList.remove('high-contrast');
+                    break;
+                case 'invert':
+                    body.classList.remove('invert-colors');
+                    break;
+                case 'links':
+                    body.classList.remove('highlight-links');
+                    break;
+                case 'headings':
+                    body.classList.remove('highlight-headings');
+                    break;
+                case 'zoom':
+                    body.classList.remove('grayscale');
+                    break;
+                case 'font':
+                    body.style.filter = '';
+                    break;
+                case 'cursor-black':
+                    body.classList.remove('big-cursor');
+                    break;
+                case 'cursor-white':
+                    body.classList.remove('white-cursor');
+                    break;
+                case 'monochrome':
+                    body.classList.remove('monochrome');
+                    break;
+                case 'underline':
+                    body.classList.remove('sepia');
+                    break;
+                case 'reading':
+                    body.classList.remove('reading-mode');
+                    break;
+                case 'screen-magnify':
+                    body.classList.remove('magnify');
+                    break;
+            }
+        }
+
+        // איפוס כל התכונות
+        function resetAllFeatures() {
+            // איפוס כל התכונות הפעילות
+            activeFeatures.forEach(feature => {
+                disableFeature(feature);
+                const element = document.querySelector(`[data-feature="${feature}"]`);
+                if (element) {
+                    element.classList.remove('active');
+                }
+            });
+            
+            activeFeatures.clear();
+            saveSettings();
+        }
+
+        // שמירת הגדרות בלוקל סטורייג'
+        function saveSettings() {
+            const settings = {
+                activeFeatures: Array.from(activeFeatures)
+            };
+            localStorage.setItem('accessibilitySettings', JSON.stringify(settings));
+        }
+
+        function loadSettings() {
+            const saved = localStorage.getItem('accessibilitySettings');
+            if (saved) {
+                const settings = JSON.parse(saved);
+                
+                // טעינת תכונות פעילות
+                settings.activeFeatures.forEach(feature => {
+                    activeFeatures.add(feature);
+                    const element = document.querySelector(`[data-feature="${feature}"]`);
+                    if (element) {
+                        element.classList.add('active');
+                        enableFeature(feature);
+                    }
+                });
+            }
+        }
+
+        // סגירת התפריט בלחיצה על ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeAccessibilityMenu();
+            }
+        });
+
+        // טעינת הגדרות בטעינת הדף
+        document.addEventListener('DOMContentLoaded', loadSettings);
+    </script>
+</body>
+</html>
