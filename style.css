@@ -1,16 +1,24 @@
         @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@100;200;300;400;500;600;700;800;900&display=swap');
         
         :root {
-            --primary: #060e21;
-            --secondary: #101e36;
-            --accent: #2cd3d3;
-            --accent-secondary: #a742bc;
+            --primary: #0a0a0a;
+            --primary-rgb: 10, 10, 10;
+            --secondary: #151515;
+            --accent: #b3b3b3;
+            --accent-rgb: 179, 179, 179;
+            --accent-secondary: #ffb020;
+            --gradient-gold: linear-gradient(90deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
             --text: #ffffff;
-            --text-secondary: #a9b6d3;
+            --text-secondary: #9e9e9e;
             --text-dark: #171717;
             --card-bg: rgba(255, 255, 255, 0.03);
             --card-border: rgba(255, 255, 255, 0.06);
             --gray-bg: #f0f4f8;
+
+            /* Fluid type scale */
+            --fs-h1: clamp(2.5rem, 1.4rem + 4vw, 5rem);
+            --fs-h2: clamp(2rem, 1.6rem + 1.6vw, 3rem);
+            --fs-h3: clamp(1.4rem, 1.25rem + 0.6vw, 1.8rem);
         }
         
         * {
@@ -48,8 +56,14 @@
             position: absolute;
             border-radius: 50%;
             filter: blur(80px);
-            opacity: 0.2;
+            opacity: 0.12;
             z-index: 0;
+            animation: glowBreathe 9s ease-in-out infinite;
+        }
+
+        @keyframes glowBreathe {
+            0%, 100% { opacity: 0.1; transform: scale(1); }
+            50% { opacity: 0.18; transform: scale(1.15); }
         }
         
         .glow-1 {
@@ -83,22 +97,58 @@
         }
         
         h1 {
-            font-size: 5rem;
+            font-size: var(--fs-h1);
+            font-weight: 800;
             letter-spacing: -1px;
-            background: linear-gradient(135deg, var(--text), var(--accent));
+            margin-bottom: 30px;
+        }
+
+        .gold-text {
+            background: var(--gradient-gold);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 30px;
+        }
+
+        .gold-text.shimmer {
+            background-size: 250% auto;
+            animation: goldShimmer 6s linear infinite;
+        }
+
+        @keyframes goldShimmer {
+            to { background-position: -250% center; }
         }
         
         h2 {
-            font-size: 3rem;
+            font-size: var(--fs-h2);
             position: relative;
             display: inline-block;
             margin-bottom: 50px;
         }
         
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            margin-bottom: 15px;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .eyebrow::before {
+            content: '';
+            display: inline-block;
+            width: 26px;
+            height: 2px;
+            background: var(--gradient-gold);
+            flex-shrink: 0;
+        }
+
         h2::after {
             content: "";
             position: absolute;
@@ -110,7 +160,7 @@
         }
         
         h3 {
-            font-size: 1.8rem;
+            font-size: var(--fs-h3);
             background: linear-gradient(135deg, var(--text), var(--accent));
             -webkit-background-clip: text;
             background-clip: text;
@@ -149,7 +199,7 @@
         }
         
         header.scrolled {
-            background: rgba(6, 14, 33, 0.9);
+            background: rgba(var(--primary-rgb), 0.9);
             backdrop-filter: blur(10px);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             padding: 15px 0;
@@ -170,17 +220,10 @@
             align-items: center;
         }
         
-        .logo span {
-            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
         .logo-icon {
             margin-left: 10px;
             font-size: 2.2rem;
-            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            background: var(--gradient-gold);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -262,7 +305,7 @@
         }
         
         .contact-btn:hover {
-            box-shadow: 0 10px 20px rgba(44, 211, 211, 0.3);
+            box-shadow: 0 10px 20px rgba(var(--accent-rgb), 0.3);
             transform: translateY(-3px);
         }
         
@@ -392,7 +435,7 @@
         }
         
         .btn-primary:hover {
-            box-shadow: 0 10px 20px rgba(44, 211, 211, 0.3);
+            box-shadow: 0 10px 20px rgba(var(--accent-rgb), 0.3);
             transform: translateY(-3px);
         }
         
@@ -444,7 +487,7 @@
         .services-grid {
             grid-column: 1 / 13;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(2, 1fr);
             gap: 30px;
             margin-top: 30px;
         }
@@ -478,7 +521,7 @@
         .service-card:hover {
             transform: translateY(-10px);
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.1);
-            border-color: rgba(44, 211, 211, 0.2);
+            border-color: rgba(var(--accent-rgb), 0.2);
         }
         
         .service-icon {
@@ -489,6 +532,11 @@
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
+            transition: transform 0.4s ease;
+        }
+
+        .service-card:hover .service-icon {
+            transform: scale(1.15) rotate(-5deg);
         }
         
         .service-title {
@@ -517,6 +565,90 @@
             font-weight: bold;
         }
         
+        /* Team Section */
+        .team {
+            background-color: var(--secondary);
+            position: relative;
+        }
+
+        .team-intro {
+            grid-column: 1 / 8;
+            margin-bottom: 50px;
+        }
+
+        .team-grid {
+            grid-column: 1 / 13;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .team-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.4s ease;
+        }
+
+        .team-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+            border-color: rgba(var(--accent-rgb), 0.2);
+        }
+
+        .team-avatar {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            margin: 0 auto 25px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.4rem;
+            background: var(--primary);
+            transition: transform 0.4s ease;
+        }
+
+        .team-card:hover .team-avatar {
+            transform: scale(1.08);
+        }
+
+        .team-avatar::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            padding: 2px;
+            background: var(--gradient-gold);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+        }
+
+        .team-avatar i {
+            position: relative;
+            z-index: 1;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .team-name {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+
+        .team-role {
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
         /* Process Section */
         .process {
             background-color: var(--primary);
@@ -530,7 +662,7 @@
         .process-steps {
             grid-column: 1 / 13;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
             gap: 30px;
         }
         
@@ -549,7 +681,13 @@
             height: 2px;
             background: linear-gradient(to right, var(--accent), transparent);
         }
-        
+
+        @media (max-width: 1150px) {
+            .process-step:not(:last-child)::after {
+                display: none;
+            }
+        }
+
         .step-number {
             width: 80px;
             height: 80px;
@@ -562,8 +700,13 @@
             font-size: 1.8rem;
             font-weight: 700;
             color: var(--primary);
+            transition: transform 0.4s ease;
         }
-        
+
+        .process-step:hover .step-number {
+            transform: scale(1.1) rotate(8deg);
+        }
+
         .step-title {
             margin-bottom: 15px;
             font-size: 1.3rem;
@@ -609,7 +752,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(to top, rgba(6, 14, 33, 0.9), transparent);
+            background: linear-gradient(to top, rgba(var(--primary-rgb), 0.9), transparent);
             padding: 30px;
             display: flex;
             flex-direction: column;
@@ -686,7 +829,7 @@
             top: 20px;
             right: 30px;
             font-size: 120px;
-            color: rgba(44, 211, 211, 0.1);
+            color: rgba(var(--accent-rgb), 0.1);
             font-family: serif;
             line-height: 1;
         }
@@ -867,7 +1010,7 @@
         .form-control:focus {
             outline: none;
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(44, 211, 211, 0.1);
+            box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.1);
         }
         
         textarea.form-control {
@@ -890,7 +1033,7 @@
         }
         
         .submit-btn:hover {
-            box-shadow: 0 10px 20px rgba(44, 211, 211, 0.3);
+            box-shadow: 0 10px 20px rgba(var(--accent-rgb), 0.3);
             transform: translateY(-3px);
         }
         
@@ -1062,14 +1205,6 @@
         }
         
         @media (max-width: 1200px) {
-            h1 {
-                font-size: 4rem;
-            }
-            
-            h2 {
-                font-size: 2.5rem;
-            }
-            
             .hero-content {
                 grid-column: 1 / 8;
             }
@@ -1080,14 +1215,6 @@
         }
         
         @media (max-width: 992px) {
-            h1 {
-                font-size: 3.5rem;
-            }
-            
-            h2 {
-                font-size: 2.2rem;
-            }
-            
             .hero-content {
                 grid-column: 1 / 13;
                 text-align: center;
@@ -1103,12 +1230,12 @@
                 justify-content: center;
             }
             
-            .service-intro, .process-intro, .projects-intro, .testimonials-intro, .contact-intro {
+            .service-intro, .team-intro, .process-intro, .projects-intro, .testimonials-intro, .contact-intro {
                 grid-column: 1 / 13;
                 text-align: center;
             }
-            
-            .service-intro h2::after, .process-intro h2::after, .projects-intro h2::after, .testimonials-intro h2::after, .contact-intro h2::after {
+
+            .service-intro h2::after, .team-intro h2::after, .process-intro h2::after, .projects-intro h2::after, .testimonials-intro h2::after, .contact-intro h2::after {
                 left: 50%;
                 transform: translateX(-50%);
             }
@@ -1139,15 +1266,10 @@
                 z-index: 1005;
             }
             
+            /* מוסתר לגמרי במובייל - שני הילדים שלו (nav וכפתור צור קשר) גם ככה מוסתרים,
+               והשארתו כפריט flex ריק דוחפת את כפתור ההמבורגר למרכז במקום לקצה */
             .nav-container {
-                order: 2;
-                flex-direction: column;
-                align-items: flex-end;
-            }
-            
-            /* הסתרת הכפתור צור קשר בהדר במצב מובייל */
-            .nav-container .contact-btn {
-                display: none !important;
+                display: none;
             }
             
             /* סגנון לתפריט הנייד */
@@ -1173,7 +1295,7 @@
                 left: 0;
                 width: 100%;
                 height: 100%;
-                background-color: #060e21;
+                background-color: var(--primary);
                 opacity: 0.95;
             }
             
@@ -1182,7 +1304,7 @@
                 position: relative;
                 width: 80%;
                 height: 100%;
-                background-color: #060e21;
+                background-color: var(--primary);
                 float: right;
                 box-shadow: -5px 0 30px rgba(0, 0, 0, 0.3);
                 padding: 80px 20px 40px;
@@ -1243,7 +1365,7 @@
             
             .mobile-nav-content ul li a:hover,
             .mobile-nav-content ul li a.active {
-                background-color: rgba(44, 211, 211, 0.1);
+                background-color: rgba(var(--accent-rgb), 0.1);
                 transform: translateX(-5px);
                 border-color: var(--accent);
             }
@@ -1262,10 +1384,6 @@
                 font-size: 1.1rem;
             }
             
-            h1 {
-                font-size: 3rem;
-            }
-            
             .hero {
                 padding: 120px 0 80px;
             }
@@ -1274,6 +1392,10 @@
                 font-size: 1.2rem;
             }
             
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
             .projects-grid {
                 grid-template-columns: 1fr;
             }
@@ -1297,16 +1419,8 @@
     height: auto !important;
   }
         }
-        
+
         @media (max-width: 576px) {
-            h1 {
-                font-size: 2.5rem;
-            }
-            
-            h2 {
-                font-size: 2rem;
-            }
-            
             .section {
                 padding: 70px 0;
             }
@@ -1336,7 +1450,7 @@
             }
         }
   .Accessibility-Statement{
-    color: #a9b6d3;
+    color: var(--text-secondary);
     font-weight: bold;
   }
     
